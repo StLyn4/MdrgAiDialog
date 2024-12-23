@@ -25,7 +25,7 @@ public class PluginConfigSingleton {
     usedAiProvider = configFile.Bind(
       "General",
       "UsedAiProvider",
-      "Mistral",
+      "Ollama",
       "The AI provider to use"
     ).Value;
 
@@ -39,14 +39,14 @@ public class PluginConfigSingleton {
     aiProviderApiKey = configFile.Bind(
       "General",
       "AiProviderApiKey",
-      "1234567890",
+      "CHANGE_ME",
       "The API key for the AI provider"
     ).Value;
 
     aiProviderModel = configFile.Bind(
       "General",
       "AiProviderModel",
-      "llama3.1",
+      "mistral-nemo",
       "The model to use"
     ).Value;
   }

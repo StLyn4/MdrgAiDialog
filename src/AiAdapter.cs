@@ -24,6 +24,7 @@ public class AiAdapter {
   private IAiProvider CreateProvider(string provider, string apiUrl, string apiKey, string model) {
     return provider.ToLower() switch {
       "mistral" => new MistralAiProvider(apiUrl, apiKey, model),
+      "ollama" => new OllamaAiProvider(apiUrl, model),
       _ => throw new ArgumentException($"Unknown AI provider: {provider}")
     };
   }
