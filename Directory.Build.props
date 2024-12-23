@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup>
+        <!-- You can override this path in Directory.Build.user.props -->
+        <GamePath>F:\Games\Other\PGs\My Dystopian Robot Girlfriend</GamePath>
+    </PropertyGroup>
+</Project>

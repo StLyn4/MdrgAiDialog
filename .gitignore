@@ -1,0 +1,89 @@
+# Environment variables:
+.env
+.env*.local
+
+# Visual Studio files:
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+
+# Build results:
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Dd]ist/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio Code:
+.vscode/
+
+# ReSharper:
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# NuGet:
+packages/
+*.nupkg
+
+# [JetBrains] User settings:
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+
+# [JetBrains] Personal data:
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+
+# User-specific build settings
+Directory.Build.user.props
+
+# Temporary files:
+/temp/
+/.tmp/
+/tmp/
+
+# Cache files:
+.cache/
+
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Mac OS X:
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+.Spotlight-V100
+.Trashes
+._*
+
+# Other:
+*.pem

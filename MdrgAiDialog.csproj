@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Change this to your game path! -->
+    <GamePath Condition="!Exists('$(GamePath)')">F:\Games\Other\PGs\My Dystopian Robot Girlfriend</GamePath>
+    <BepInExPath>$(GamePath)\BepInEx</BepInExPath>
+    <PluginsPath>$(BepInExPath)\plugins</PluginsPath>
+
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>MdrgAiDialog</AssemblyName>
+    <Product>Mod for talking to LLM</Product>
+    <Version>0.1.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>MdrgAiDialog</RootNamespace>
+
+    <PathMap>$(MSBuildProjectDirectory)=./</PathMap>
+    <DeterministicSourcePaths>true</DeterministicSourcePaths>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+
+    <Reference Include="GameAssembly">
+      <HintPath>$(GamePath)\BepInEx\interop\GameAssembly.dll</HintPath>
+    </Reference>
+    <Reference Include="IC.UI">
+      <HintPath>$(GamePath)\BepInEx\interop\IC.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="IC.Utility.Runtime">
+      <HintPath>$(GamePath)\BepInEx\interop\IC.Utility.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(GamePath)\BepInEx\interop\Il2Cppmscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(GamePath)\BepInEx\core\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(GamePath)\BepInEx\interop\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Localization">
+      <HintPath>$(GamePath)\BepInEx\interop\Unity.Localization.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
