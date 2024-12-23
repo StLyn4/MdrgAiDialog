@@ -20,8 +20,14 @@ public class ChatSingleton : StoryMonoBehaviour {
       throw new Exception("ChatSingleton instance already exists. Cannot create a new one.");
     }
 
+    var pluginConfig = PluginConfigSingleton.Instance;
+    var usedAiProvider = pluginConfig.usedAiProvider;
+    var aiProviderApiUrl = pluginConfig.aiProviderApiUrl;
+    var aiProviderApiKey = pluginConfig.aiProviderApiKey;
+    var aiProviderModel = pluginConfig.aiProviderModel;
+
     Instance = this;
-    aiAdapter = new AiAdapter();
+    aiAdapter = new AiAdapter(usedAiProvider, aiProviderApiUrl, aiProviderApiKey, aiProviderModel);
     processUserInput = new Action<string>(ProcessUserInput);
   }
 
@@ -58,7 +64,7 @@ public class ChatSingleton : StoryMonoBehaviour {
 
     while (isChatActive) {
       isInConversation = true;
-      uiOverlay.InputPopup( title, description, processUserInput);
+      uiOverlay.InputPopup(title, description, processUserInput);
 
       while (isInConversation) {
         yield return null;

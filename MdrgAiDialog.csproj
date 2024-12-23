@@ -4,6 +4,7 @@
     <GamePath Condition="!Exists('$(GamePath)')">F:\Games\Other\PGs\My Dystopian Robot Girlfriend</GamePath>
     <BepInExPath>$(GamePath)\BepInEx</BepInExPath>
     <PluginsPath>$(BepInExPath)\plugins</PluginsPath>
+    <PluginPath>$(PluginsPath)\$(AssemblyName)</PluginPath>
 
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>MdrgAiDialog</AssemblyName>
@@ -21,6 +22,7 @@
     <PathMap>$(MSBuildProjectDirectory)=./</PathMap>
     <DeterministicSourcePaths>true</DeterministicSourcePaths>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -64,4 +66,15 @@
       <HintPath>$(GamePath)\BepInEx\interop\Unity.Localization.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <PluginFiles Include="$(TargetPath)" />
+    </ItemGroup>
+
+    <RemoveDir Directories="$(PluginPath)" />
+    <MakeDir Directories="$(PluginPath)" />
+    <Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(PluginPath)" Condition="Exists('%(FullPath)')" />
+    <Copy SourceFiles="@(DependencyFiles)" DestinationFolder="$(PluginPath)" Condition="Exists('%(FullPath)')" />
+  </Target>
 </Project>

@@ -3,7 +3,7 @@ using System;
 
 namespace MdrgAiDialog;
 
-public abstract class StoryMonoBehaviour: MonoBehaviour {
+public abstract class StoryMonoBehaviour : MonoBehaviour {
   protected bool isStoryActive { get; private set; } = false;
 
   private Action stopStory;

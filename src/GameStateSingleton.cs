@@ -1,10 +1,10 @@
 namespace MdrgAiDialog;
 
 public class GameStateSingleton {
-  private GameStateSingleton() {}
+  private GameStateSingleton() { }
 
   private static GameStateSingleton _instance;
-  public static GameStateSingleton Instance{
+  public static GameStateSingleton Instance {
     get {
       if (_instance == null) {
         _instance = new GameStateSingleton();

@@ -20,12 +20,6 @@ if errorlevel 1 (
     exit /b 1
 )
 
-@REM Create plugins directory if it doesn't exist 
-if not exist "%GAME_DIR_PATH%\BepInEx\plugins" mkdir "%GAME_DIR_PATH%\BepInEx\plugins"
-
-@REM Copy the built dll to plugins folder
-copy /Y "bin\Release\net6.0\MdrgAiDialog.dll" "%GAME_DIR_PATH%\BepInEx\plugins"
-
 @REM If run parameter is provided, launch the game
 if "%1"=="run" (
     start "" "%GAME_EXE_PATH%"
