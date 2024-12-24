@@ -12,7 +12,9 @@ A project for working with conversational AI.
 ## Installation (for development)
 
 1. Make sure you have .NET 6.0 and BepInEx 6.0 (Bleeding Edge!) installed
-2. Clone the repository:
+2. Get it from: [https://builds.bepinex.dev/projects/bepinex_be] IL2Cpp x64 (64 bit)
+3. Extract BepInEx into the root directory of the MDRG game folder, and run once, the mod loader should install dependencies
+4. Clone the repository:
 ```
 git clone https://github.com/StLyn4/MdrgAiDialog.git
 ```
@@ -22,3 +24,29 @@ git clone https://github.com/StLyn4/MdrgAiDialog.git
 ```
 scripts\install-and-run.bat
 ```
+
+## Update Path in installer.bar
+
+1. Go into the scripts folder, and right click on "install.bat"
+2. On line 5 go to set "GAME_DIR_PATH="
+ and set the full URL to the game directory.
+3. Save and exit, this should allow the files to compile and copy to the proper directory.
+
+
+## Fixing timeout
+
+Inside of the Bepinex Config folder inside the Game folder you'll find "com.delta.mdrg.aidialog.cfg"
+
+Set "TimeoutSeconds = 30" to "TimeoutSeconds = 300" and change "AiProviderModel" to "artifish/llama3.2-uncensored"
+
+
+Next go download Ollama from [https://ollama.com/] 
+
+Run the command  ```ollama run artifish/llama3.2-uncensored``` and wait for it to launch, then type in  ```/bye``` to end the session
+
+The model will have a System Prompt in one of the files NOTE: Do not open the language model it may lag/freeze your PC. 
+
+[No Input Prompt Available]
+It will be one of the blob files, to set the system Prompt this will dictate how the AI Model behaves. 
+
+
