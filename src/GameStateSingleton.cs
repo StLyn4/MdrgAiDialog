@@ -3,14 +3,14 @@ namespace MdrgAiDialog;
 public class GameStateSingleton {
   private GameStateSingleton() { }
 
-  private static GameStateSingleton _instance;
+  private static GameStateSingleton s_instance;
   public static GameStateSingleton Instance {
     get {
-      if (_instance == null) {
-        _instance = new GameStateSingleton();
+      if (s_instance == null) {
+        s_instance = new GameStateSingleton();
       }
 
-      return _instance;
+      return s_instance;
     }
   }
 

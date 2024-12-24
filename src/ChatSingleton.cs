@@ -9,42 +9,34 @@ namespace MdrgAiDialog;
 public class ChatSingleton : StoryMonoBehaviour {
   public static ChatSingleton Instance { get; private set; }
 
-  public bool isChatActive { get; private set; } = false;
-  private bool isInConversation = false;
+  public bool IsChatActive { get; private set; } = false;
+  private bool IsInConversation = false;
 
-  private AiAdapter aiAdapter;
-  private Action<string> processUserInput;
+  private AiAdapter AiAdapter;
+  private Action<string> ProcessUserInputAction;
+
+  // TODO: Remove later
+  private readonly BepInEx.Logging.ManualLogSource _logger;
 
   public ChatSingleton() {
     if (Instance != null) {
       throw new Exception("ChatSingleton instance already exists. Cannot create a new one.");
     }
 
-    var pluginConfig = PluginConfigSingleton.Instance;
-    var usedAiProvider = pluginConfig.usedAiProvider;
-    var aiProviderApiUrl = pluginConfig.aiProviderApiUrl;
-    var aiProviderApiKey = pluginConfig.aiProviderApiKey;
-    var aiProviderModel = pluginConfig.aiProviderModel;
-
     Instance = this;
-    aiAdapter = new AiAdapter(usedAiProvider, aiProviderApiUrl, aiProviderApiKey, aiProviderModel);
-    processUserInput = new Action<string>(ProcessUserInput);
-  }
-
-  public void Update() {
-    if (Input.GetKeyDown("c")) {
-      StartChat();
-    }
+    AiAdapter = new AiAdapter();
+    ProcessUserInputAction = new Action<string>(ProcessUserInput);
+    _logger = BepInEx.Logging.Logger.CreateLogSource("ChatSingleton");
   }
 
   public void StartChat() {
-    isChatActive = true;
+    IsChatActive = true;
     StartStory();
   }
 
   public void StopChat() {
-    isChatActive = false;
-    isInConversation = false;
+    IsChatActive = false;
+    IsInConversation = false;
 
     // Clear bot expression just in case
     this.StartCoroutine(ClearBotExpression());
@@ -62,11 +54,11 @@ public class ChatSingleton : StoryMonoBehaviour {
     var title = "Chat";
     var description = $"Say something to {botName}.\n\nTo end the conversation, just say goodbye.\n(Type \"exit\" to force exit)";
 
-    while (isChatActive) {
-      isInConversation = true;
-      uiOverlay.InputPopup(title, description, processUserInput);
+    while (IsChatActive) {
+      IsInConversation = true;
+      uiOverlay.InputPopup(title, description, ProcessUserInputAction);
 
-      while (isInConversation) {
+      while (IsInConversation) {
         yield return null;
       }
     }
@@ -85,36 +77,64 @@ public class ChatSingleton : StoryMonoBehaviour {
     }
 
     if (!ValidateUserInput(userInput)) {
-      isInConversation = false;
+      IsInConversation = false;
       return;
     }
 
-    var messages = await aiAdapter.GetChatMessages(userInput);
+    _logger.LogInfo($"userInput: '{userInput}'");
+    var messages = await AiAdapter.GetChatMessages(userInput);
+    _logger.LogInfo($"messages: '{string.Join(", ", messages)}'");
     this.StartCoroutine(Conversation(messages));
   }
 
-  private string[] ProcessMessages(string[] messages) {
+  private string ProcessMessage(string message) {
     var gameState = GameStateSingleton.Instance;
     var isCuddle = gameState.IsStateType<CuddleState>();
 
-    if (isCuddle) {
-      // Should not show arm motion while in bed
-      messages = messages.Where((message) => !message.StartsWith("#bot.Arm")).ToArray();
+    message = message.Trim();
+
+    // Process flow commands
+    if (message.StartsWith("#flow.")) {
+      switch (message) {
+        case "#flow.ExitChat":
+          IsChatActive = false; // Will exit after current message processing
+          return "";
+        case "#flow.ResetChat":
+          AiAdapter.ResetChat();
+          return "";
+      }
     }
 
-    return messages;
+    // Filter arm motions in cuddle state
+    if (isCuddle && message.StartsWith("#bot.Arm")) {
+      return "";
+    }
+
+    // Return empty string for commands that were filtered out
+    // Return the message for valid commands or text messages
+    return message;
   }
 
   private IEnumerator Conversation(string[] messages) {
-    var processedMessages = ProcessMessages(messages);
+    foreach (var message in messages) {
+      var processedMessage = ProcessMessage(message);
 
-    foreach (var message in processedMessages) {
-      var isCommand = message.StartsWith("#");
-      var finalMessage = isCommand ? message : $"Bot: {message}";
+      if (string.IsNullOrEmpty(processedMessage)) {
+        continue;
+      }
+
+      var isCommand = processedMessage.StartsWith("#");
+      var finalMessage = isCommand ? processedMessage : $"Bot: {processedMessage}";
+      _logger.LogInfo($"isCommand: {isCommand}; message: '{processedMessage}'");
+
       yield return StartCoroutine(BetterConversationManager.DoConversation(finalMessage));
+
+      if (!IsChatActive) {
+        break; // Exit if chat was stopped by #flow.ExitChat
+      }
     }
 
-    isInConversation = false;
+    IsInConversation = false;
   }
 
   private IEnumerator ClearBotExpression() {
