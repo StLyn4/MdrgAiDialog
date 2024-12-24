@@ -6,7 +6,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MdrgAiDialog.AiProviders;
 
@@ -26,17 +25,17 @@ public class MistralAiProvider : AiProvider {
   }
 
   public override void SetSystemMessage(string message) {
-    _messages.RemoveAll((m) => m.Role == "system");
-    _messages.Insert(0, new ChatMessage { Role = "system", Content = message });
+    Messages.RemoveAll((m) => m.Role == "system");
+    Messages.Insert(0, new ChatMessage { Role = "system", Content = message });
   }
 
   public override async Task<string> SendMessage(string message) {
     try {
-      _messages.Add(new ChatMessage { Role = "user", Content = message });
+      Messages.Add(new ChatMessage { Role = "user", Content = message });
 
       var request = new ChatRequest {
         Model = _model,
-        Messages = _messages,
+        Messages = Messages,
         Temperature = _temperature,
         MaxTokens = 1000,
         TopP = 1,
@@ -59,12 +58,11 @@ public class MistralAiProvider : AiProvider {
       var chatResponse = JsonSerializer.Deserialize<ChatResponse>(result);
       var assistantMessage = chatResponse.Choices[0].Message;
 
-      _messages.Add(assistantMessage);
+      Messages.Add(new ChatMessage { Role = "assistant", Content = assistantMessage.Content });
       return assistantMessage.Content;
     } catch (Exception ex) {
-      // Delete user message if error
-      if (_messages.Count > 0) {
-        _messages.RemoveAt(_messages.Count - 1);
+      if (Messages.Count > 0) {
+        Messages.RemoveAt(Messages.Count - 1);
       }
       return $"Error: {ex.Message}";
     }

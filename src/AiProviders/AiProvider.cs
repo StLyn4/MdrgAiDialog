@@ -1,24 +1,30 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MdrgAiDialog.AiProviders;
 
 public abstract class AiProvider {
-  protected List<ChatMessage> _messages = [];
+  protected List<ChatMessage> Messages = [];
+
+  protected string ExtractTextContent(string rawMessage) {
+    var messages = JsonSerializer.Deserialize<string[]>(rawMessage);
+    return string.Join(" ", messages.Where((m) => !m.StartsWith("#")));
+  }
 
   public abstract void SetSystemMessage(string message);
   public abstract Task<string> SendMessage(string message);
 
   public void ResetChat(bool resetSystem = false) {
     if (resetSystem) {
-      _messages.Clear();
+      Messages.Clear();
     } else {
-      var systemMessage = _messages.FirstOrDefault((m) => m.Role == "system");
-      _messages.Clear();
+      var systemMessage = Messages.FirstOrDefault((m) => m.Role == "system");
+      Messages.Clear();
       if (systemMessage != null) {
-        _messages.Add(systemMessage);
+        Messages.Add(systemMessage);
       }
     }
   }
