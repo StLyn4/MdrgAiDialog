@@ -58,7 +58,9 @@ public class MistralAiProvider : AiProvider {
       var chatResponse = JsonSerializer.Deserialize<ChatResponse>(result);
       var assistantMessage = chatResponse.Choices[0].Message;
 
-      Messages.Add(new ChatMessage { Role = "assistant", Content = assistantMessage.Content });
+      // Extract only text content from the response
+      var textContent = ExtractTextContent(assistantMessage.Content);
+      Messages.Add(new ChatMessage { Role = "assistant", Content = textContent });
       return assistantMessage.Content;
     } catch (Exception ex) {
       if (Messages.Count > 0) {
