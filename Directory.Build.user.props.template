@@ -1,6 +1,0 @@
-<Project>
-    <PropertyGroup>
-        <!-- Set your game installation path here -->
-        <GamePath>F:\Games\Other\PGs\My Dystopian Robot Girlfriend</GamePath>
-    </PropertyGroup>
-</Project>

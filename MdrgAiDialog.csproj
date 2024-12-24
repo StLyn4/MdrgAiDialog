@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- Change this to your game path! -->
+    <!-- To change the game path, edit Directory.Build.props -->
     <GamePath Condition="!Exists('$(GamePath)')">F:\Games\Other\PGs\My Dystopian Robot Girlfriend</GamePath>
     <BepInExPath>$(GamePath)\BepInEx</BepInExPath>
     <PluginsPath>$(BepInExPath)\plugins</PluginsPath>
@@ -36,34 +36,34 @@
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
 
     <Reference Include="GameAssembly">
-      <HintPath>$(GamePath)\BepInEx\interop\GameAssembly.dll</HintPath>
+      <HintPath>$(BepInExPath)\interop\GameAssembly.dll</HintPath>
     </Reference>
     <Reference Include="IC.UI">
-      <HintPath>$(GamePath)\BepInEx\interop\IC.UI.dll</HintPath>
+      <HintPath>$(BepInExPath)\interop\IC.UI.dll</HintPath>
     </Reference>
     <Reference Include="IC.Utility.Runtime">
-      <HintPath>$(GamePath)\BepInEx\interop\IC.Utility.Runtime.dll</HintPath>
+      <HintPath>$(BepInExPath)\interop\IC.Utility.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>$(GamePath)\BepInEx\interop\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>$(BepInExPath)\interop\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>$(GamePath)\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>$(BepInExPath)\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.dll</HintPath>
+      <HintPath>$(BepInExPath)\interop\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(BepInExPath)\interop\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(BepInExPath)\interop\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>$(GamePath)\BepInEx\interop\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(BepInExPath)\interop\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Localization">
-      <HintPath>$(GamePath)\BepInEx\interop\Unity.Localization.dll</HintPath>
+      <HintPath>$(BepInExPath)\interop\Unity.Localization.dll</HintPath>
     </Reference>
   </ItemGroup>
 
