@@ -3,7 +3,7 @@
 A project for working with conversational AI.
 
 ## Version 0.2 Release
-# [New Release is now out! Click here to Download](https://github.com/StLyn4/MdrgAiDialog/releases/tag/Stable-Release-Ver-2)
+[New Release is now out! Click here to Download](https://github.com/StLyn4/MdrgAiDialog/releases/tag/Stable-Release-Ver-2)
 
 ## Installation
 
