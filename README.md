@@ -50,3 +50,6 @@ The model will have a System Prompt in one of the files NOTE: Do not open the la
 
 [No Input Prompt Available]
 It will be one of the blob files, to set the system Prompt this will dictate how the AI Model behaves.
+
+## Version 2.0 Stable Release
+# [Stable Release is now out! Click here to Download](https://github.com/StLyn4/MdrgAiDialog/releases/tag/Stable-Release-Ver-2)
