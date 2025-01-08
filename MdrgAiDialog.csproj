@@ -9,7 +9,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>MdrgAiDialog</AssemblyName>
     <Product>Mod for talking to LLM</Product>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>
@@ -38,6 +38,9 @@
     <Reference Include="GameAssembly">
       <HintPath>$(BepInExPath)\interop\GameAssembly.dll</HintPath>
     </Reference>
+    <Reference Include="Fungus">
+      <HintPath>$(BepInExPath)\interop\Fungus.dll</HintPath>
+    </Reference>
     <Reference Include="IC.UI">
       <HintPath>$(BepInExPath)\interop\IC.UI.dll</HintPath>
     </Reference>
@@ -55,6 +58,12 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(BepInExPath)\interop\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>$(BepInExPath)\interop\UnityEngine.InputLegacyModule.dll</HintPath>
