@@ -16,10 +16,10 @@ namespace MdrgAiDialog.AiProviders;
 /// AI provider for Ollama
 /// </summary>
 public class Ollama : OpenAi {
+  private static readonly Logger logger = new("Ollama");
+
   private bool modelAvailable = false;
   private readonly HttpClient managementClient;
-
-  private static readonly Logger logger = new("Ollama");
 
   public Ollama(AiProviderConfig config) : base(config) {
     managementClient = new HttpClient {

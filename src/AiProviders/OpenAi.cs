@@ -14,9 +14,9 @@ namespace MdrgAiDialog.AiProviders;
 /// AI provider for OpenAI API and compatible services
 /// </summary>
 public class OpenAi : AiProvider {
-  protected readonly HttpClient client;
-
   private static readonly Logger logger = new("OpenAi");
+
+  protected readonly HttpClient client;
 
   public OpenAi(AiProviderConfig config) : base(config) {
     client = new HttpClient {

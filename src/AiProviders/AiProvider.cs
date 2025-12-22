@@ -20,6 +20,46 @@ public abstract class AiProvider(AiProviderConfig config) {
   protected List<ChatMessage> messages = [];
 
   /// <summary>
+  /// Returns a snapshot of chat messages excluding the system message.
+  /// Intended for persistence
+  /// </summary>
+  public List<ChatMessage> GetNonSystemMessagesSnapshot() {
+    // Avoid LINQ allocations on IL2CPP; snapshot list is used for serialization.
+    var result = new List<ChatMessage>(messages.Count);
+    for (int i = 0; i < messages.Count; i++) {
+      var m = messages[i];
+      if (m == null) continue;
+      if (m.Role == "system") continue;
+      result.Add(m);
+    }
+    return result;
+  }
+
+  /// <summary>
+  /// Replaces chat history excluding system message. Keeps current system message intact.
+  /// Intended for restoring persisted history
+  /// </summary>
+  public void SetNonSystemMessages(IEnumerable<ChatMessage> nonSystemMessages) {
+    var systemMessage = messages.FirstOrDefault(m => m?.Role == "system");
+    messages.Clear();
+
+    if (systemMessage != null) {
+      messages.Add(systemMessage);
+    }
+
+    if (nonSystemMessages == null) {
+      return;
+    }
+
+    foreach (var m in nonSystemMessages) {
+      if (m == null) continue;
+      if (m.Role == "system") continue;
+      // Copy to avoid sharing references with persisted/cache objects.
+      messages.Add(new ChatMessage { Role = m.Role, Content = m.Content, Prefix = m.Prefix });
+    }
+  }
+
+  /// <summary>
   /// Performs warmup of the AI model so it's ready to use as soon as possible
   /// </summary>
   /// <remarks>

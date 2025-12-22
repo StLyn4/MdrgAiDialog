@@ -19,10 +19,10 @@ public class MonoSingletonAttribute : Attribute { }
 /// and prevent duplicate instances
 /// </remarks>
 public static class MonoSingletonManager {
+  private static readonly Logger logger = new("MonoSingletonManager");
+
   private static readonly Dictionary<Type, MonoBehaviour> singletons = [];
   private static readonly HashSet<Type> pendingSingletons = [];
-
-  private static readonly Logger logger = new("MonoSingletonManager");
 
   /// <summary>
   /// Creates a new instance of a singleton component if it doesn't exist

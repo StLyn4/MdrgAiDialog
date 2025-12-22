@@ -149,6 +149,22 @@ CRITICAL REMINDERS:
     }
   }
 
+  /// <summary>
+  /// Returns a snapshot of the chat history excluding the system message.
+  /// Intended for persistence
+  /// </summary>
+  public List<AiProvider.ChatMessage> GetNonSystemMessagesSnapshot() {
+    return provider.GetNonSystemMessagesSnapshot();
+  }
+
+  /// <summary>
+  /// Restores the chat history from a snapshot
+  /// </summary>
+  /// <param name="nonSystemMessages">Snapshot of the chat history excluding the system message</param>
+  public void RestoreNonSystemMessages(IEnumerable<AiProvider.ChatMessage> nonSystemMessages) {
+    provider.SetNonSystemMessages(nonSystemMessages);
+  }
+
   private static AiProvider CreateProvider() {
     var providerName = ModConfig.UsedProvider;
     var config = ModConfig.GetConfigFor(providerName);

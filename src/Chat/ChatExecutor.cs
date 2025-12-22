@@ -9,10 +9,10 @@ namespace MdrgAiDialog.Chat;
 /// Executes commands embedded in AI responses
 /// </summary>
 public class ChatExecutor(ChatManager chatManager, ChatWriter chatWriter) {
+  private static readonly Logger logger = new("ChatExecutor");
+
   public readonly ChatManager chatManager = chatManager;
   public readonly ChatWriter chatWriter = chatWriter;
-
-  private static readonly Logger logger = new("ChatExecutor");
 
   public static readonly HashSet<string> validExpressions = [
     "#!bot.Expression.VerySad", "#!bot.Expression.Sad",

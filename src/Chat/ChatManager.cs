@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MelonLoader;
 using Il2Cpp;
@@ -55,6 +56,18 @@ public class ChatManager : StoryMonoBehaviour {
   /// </summary>
   public void Awake() {
     this.ValidateSingleton();
+    SaveStorage.EventBus.AddListener("cache-invalidated", ReloadHistoryFromSave);
+    ReloadHistoryFromSave();
+  }
+
+  private void ReloadHistoryFromSave() {
+    var nonSystem = SaveStorage.Instance.GetValue<List<AiProviders.AiProvider.ChatMessage>>("chat-history", []);
+    aiAdapter.RestoreNonSystemMessages(nonSystem);
+  }
+
+  private void PersistHistoryToSave() {
+    var nonSystem = aiAdapter.GetNonSystemMessagesSnapshot();
+    SaveStorage.Instance.SetValue("chat-history", nonSystem);
   }
 
   /// <summary>
@@ -84,6 +97,7 @@ public class ChatManager : StoryMonoBehaviour {
   /// </summary>
   public void ResetChat() {
     aiAdapter.ResetChat();
+    SaveStorage.Instance.RemoveValue("chat-history");
   }
 
   /// <summary>
@@ -187,5 +201,7 @@ public class ChatManager : StoryMonoBehaviour {
       await parser.Parse(chunk);
     }
     await parser.Flush();
+
+    PersistHistoryToSave();
   }
 }
