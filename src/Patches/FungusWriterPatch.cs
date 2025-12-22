@@ -1,5 +1,5 @@
-using Fungus;
 using HarmonyLib;
+using Il2CppFungus;
 using MdrgAiDialog.Chat;
 using MdrgAiDialog.Utils;
 

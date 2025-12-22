@@ -1,22 +1,23 @@
-using BepInEx.Logging;
+using MelonLoader;
 
 namespace MdrgAiDialog.Utils;
 
 /// <summary>
 /// A simple logging utility that provides scoped logging capabilities
 /// </summary>
-public class Logger(string scope) {
-  /// <summary>
-  /// The underlying log source scoped to the specified name
-  /// </summary>
-  private readonly ManualLogSource logSource = BepInEx.Logging.Logger.CreateLogSource(scope);
+public class Logger {
+  private readonly string scope;
+
+  public Logger(string scope) {
+    this.scope = scope;
+  }
 
   /// <summary>
   /// Logs an informational message to the current scope
   /// </summary>
   /// <param name="message">The message to log</param>
   public void Log(string message) {
-    logSource.LogMessage(message);
+    MelonLogger.Msg($"[{scope}] {message}");
   }
 
   /// <summary>
@@ -24,7 +25,7 @@ public class Logger(string scope) {
   /// </summary>
   /// <param name="message">The warning message to log</param>
   public void LogWarning(string message) {
-    logSource.LogWarning(message);
+    MelonLogger.Warning($"[{scope}] {message}");
   }
 
   /// <summary>
@@ -32,6 +33,6 @@ public class Logger(string scope) {
   /// </summary>
   /// <param name="message">The error message to log</param>
   public void LogError(string message) {
-    logSource.LogError(message);
+    MelonLogger.Error($"[{scope}] {message}");
   }
 }

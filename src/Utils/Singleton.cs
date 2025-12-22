@@ -1,3 +1,5 @@
+using System;
+
 namespace MdrgAiDialog.Utils;
 
 /// <summary>
@@ -60,11 +62,11 @@ public abstract class Singleton<T> where T : Singleton<T>, new() {
   /// </remarks>
   protected Singleton() {
     if (instance != null) {
-      throw new System.Exception($"An instance of {typeof(T)} already exists.");
+      throw new Exception($"An instance of {typeof(T)} already exists.");
     }
 
     if (!isConstructorUnlocked) {
-      throw new System.Exception($"Constructor of {typeof(T)} cannot be called directly. Use {typeof(T)}.Instance instead.");
+      throw new Exception($"Constructor of {typeof(T)} cannot be called directly. Use {typeof(T)}.Instance instead.");
     }
   }
 }

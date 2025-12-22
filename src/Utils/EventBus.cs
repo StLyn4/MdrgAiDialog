@@ -19,8 +19,6 @@ public class EventBus {
   // Dictionary to store captured events and their data
   private readonly ConcurrentDictionary<string, object> capturedEvents = new();
 
-  private readonly Logger logger = new("EventBus");
-
   /// <summary>
   /// Fires an event without parameters
   /// </summary>
@@ -83,7 +81,6 @@ public class EventBus {
   public void AddListener(string eventName, EventHandler handler) {
     var handlers = eventHandlers.GetOrAdd(eventName, _ => new());
     handlers.TryAdd(handler, 0);
-    logger.LogWarning($"[Total listeners] {eventName} -> {handlers.Count}");
   }
 
   /// <summary>
@@ -95,7 +92,6 @@ public class EventBus {
   public void AddListener<T>(string eventName, EventHandler<T> handler) {
     var handlers = eventHandlers.GetOrAdd(eventName, _ => new());
     handlers.TryAdd(handler, 0);
-    logger.LogWarning($"[Total listeners] {eventName} -> {handlers.Count}");
   }
 
   /// <summary>

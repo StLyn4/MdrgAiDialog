@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using BepInEx.Unity.IL2CPP.Utils;
-using MdrgAiDialog.Utils;
+using MelonLoader;
 using UnityEngine;
+using Il2Cpp;
+using Il2CppInterop.Runtime.Attributes;
+using MdrgAiDialog.Utils;
 
 namespace MdrgAiDialog.Chat;
 
@@ -14,9 +16,10 @@ namespace MdrgAiDialog.Chat;
 /// </summary>
 /// <remarks>
 /// Manages text rendering, character-by-character animation, and callback execution.
-/// Integrates with Fungus dialog system for visual novel style text display
+/// Integrates with Il2CppFungus dialog system for visual novel style text display
 /// </remarks>
 [MonoSingleton]
+[RegisterTypeInIl2Cpp]
 public class ChatWriter : MonoBehaviour {
   public static ChatWriter Instance => MonoSingletonManager.Get<ChatWriter>();
   public static EventBus EventBus { get; private set; } = new();
@@ -27,7 +30,7 @@ public class ChatWriter : MonoBehaviour {
   private bool isStopped = false;
   private bool isWaitingForCallback = false;
 
-  private Fungus.SayDialog sayDialog;
+  private Il2CppFungus.SayDialog sayDialog;
   private readonly StringBuilder textBuffer = new(1024);
   private float nextCharacterTime = 0f;
   private int visibleCharactersCount = 0;
@@ -37,8 +40,8 @@ public class ChatWriter : MonoBehaviour {
   private bool needUpdateText = false;
   private bool needUpdateVisibleCharacters = false;
 
-  private readonly Action<Fungus.SayDialog> onDialogFinished;
-  private readonly Action<Fungus.Writer, Fungus.WriterState> onWriterState;
+  private readonly Action<Il2CppFungus.SayDialog> onDialogFinished;
+  private readonly Action<Il2CppFungus.Writer, Il2CppFungus.WriterState> onWriterState;
 
   private readonly Queue<(int Position, Func<Task> Callback)> pendingCallbacks = new();
   private (int Position, Func<Task> Callback)? nextCallback;
@@ -62,16 +65,16 @@ public class ChatWriter : MonoBehaviour {
   /// Subscribes to dialog events
   /// </summary>
   public void Start() {
-    Fungus.SayDialogSignals.OnDialogFinished += onDialogFinished;
-    Fungus.WriterSignals.OnWriterState += onWriterState;
+    Il2CppFungus.SayDialogSignals.OnDialogFinished += onDialogFinished;
+    Il2CppFungus.WriterSignals.OnWriterState += onWriterState;
   }
 
   /// <summary>
   /// Unsubscribes from dialog events
   /// </summary>
   public void OnDestroy() {
-    Fungus.SayDialogSignals.OnDialogFinished -= onDialogFinished;
-    Fungus.WriterSignals.OnWriterState -= onWriterState;
+    Il2CppFungus.SayDialogSignals.OnDialogFinished -= onDialogFinished;
+    Il2CppFungus.WriterSignals.OnWriterState -= onWriterState;
   }
 
   /// <summary>
@@ -109,7 +112,7 @@ public class ChatWriter : MonoBehaviour {
       var invWritingSpeed = 1f / writingSpeed;
 
       while (Time.time >= nextCharacterTime && !IsAllTextPrinted() && !isWaitingForCallback) {
-        this.StartCoroutine(RevealNextCharacter());
+        MelonCoroutines.Start(RevealNextCharacter());
         nextCharacterTime = Time.time + invWritingSpeed;
       }
     }
@@ -118,6 +121,7 @@ public class ChatWriter : MonoBehaviour {
   /// <summary>
   /// Prepares the writer for a new message
   /// </summary>
+  [HideFromIl2Cpp]
   public async Task Prepare() {
     ResetState();
 
@@ -129,8 +133,8 @@ public class ChatWriter : MonoBehaviour {
       StartCoroutine(BetterConversationManager.DoConversation("Bot: {s=1000}...{/s}"));
     });
 
-    sayDialog = await EventBus.WaitFor<Fungus.SayDialog>("say-dialog-changed");
-    Locker<Fungus.Writer>.Lock(sayDialog.writer);
+    sayDialog = await EventBus.WaitFor<Il2CppFungus.SayDialog>("say-dialog-changed");
+    Locker<Il2CppFungus.Writer>.Lock(sayDialog.writer);
 
     // Wait for {wi} tag to be reached
     await EventBus.WaitFor("ready-to-start");
@@ -163,6 +167,7 @@ public class ChatWriter : MonoBehaviour {
   /// Adds a callback to be executed at current text position
   /// </summary>
   /// <param name="callback">Callback to execute</param>
+  [HideFromIl2Cpp]
   public async Task AddCallback(Func<Task> callback) {
     var position = textBuffer.Length;
 
@@ -180,6 +185,7 @@ public class ChatWriter : MonoBehaviour {
   /// <summary>
   /// Flushes remaining text and executes pending callbacks
   /// </summary>
+  [HideFromIl2Cpp]
   public async Task Flush() {
     try {
       isFlushing = true;
@@ -193,7 +199,7 @@ public class ChatWriter : MonoBehaviour {
       await ExecuteCallbacks();
 
       if (sayDialog?.writer != null) {
-        Locker<Fungus.Writer>.Unlock(sayDialog.writer);
+        Locker<Il2CppFungus.Writer>.Unlock(sayDialog.writer);
       }
 
       await EventBus.WaitFor("dialog-finished");
@@ -219,9 +225,10 @@ public class ChatWriter : MonoBehaviour {
   /// <summary>
   /// Waits for user input on current dialog
   /// </summary>
+  [HideFromIl2Cpp]
   public async Task WaitForInput() {
     while (true) {
-      var writer = await EventBus.WaitFor<Fungus.Writer>("user-input");
+      var writer = await EventBus.WaitFor<Il2CppFungus.Writer>("user-input");
 
       if (writer == sayDialog?.writer) {
         // Break the loop only if the writer is the one we are waiting for
@@ -234,6 +241,7 @@ public class ChatWriter : MonoBehaviour {
   /// Stops text animation and optionally waits for input
   /// </summary>
   /// <param name="waitForInput">If true, waits for user input before stopping</param>
+  [HideFromIl2Cpp]
   public async Task Stop(bool waitForInput = false) {
     isStopped = true;
 
@@ -259,6 +267,7 @@ public class ChatWriter : MonoBehaviour {
     SyncVisibleCharacters();
   }
 
+  [HideFromIl2Cpp]
   private IEnumerator RevealNextCharacter() {
     if (!IsAllTextPrinted()) {
       IncrementPositionCounters();
@@ -280,6 +289,7 @@ public class ChatWriter : MonoBehaviour {
     needUpdateVisibleCharacters = true;
   }
 
+  [HideFromIl2Cpp]
   private async Task ExecuteCallbacks() {
     // Prepare next callback if needed
     if (nextCallback == null && pendingCallbacks.Count > 0) {
@@ -292,6 +302,7 @@ public class ChatWriter : MonoBehaviour {
     }
   }
 
+  [HideFromIl2Cpp]
   private IEnumerator ExecuteCallbacksCoroutine() {
     isWaitingForCallback = true;
 
@@ -309,18 +320,18 @@ public class ChatWriter : MonoBehaviour {
     return textEnd >= textBuffer.Length;
   }
 
-  private void OnDialogFinished(Fungus.SayDialog dialog) {
+  private void OnDialogFinished(Il2CppFungus.SayDialog dialog) {
     if (dialog != null && dialog == sayDialog) {
       EventBus.Fire("dialog-finished");
     }
   }
 
-  private void OnWriterState(Fungus.Writer writer, Fungus.WriterState state) {
+  private void OnWriterState(Il2CppFungus.Writer writer, Il2CppFungus.WriterState state) {
     if (writer == null || sayDialog == null || writer != sayDialog.writer) {
       return;
     }
 
-    if (state == Fungus.WriterState.PauseWaitForInput) {
+    if (state == Il2CppFungus.WriterState.PauseWaitForInput) {
       EventBus.Fire("ready-to-start");
     }
   }
@@ -333,7 +344,7 @@ public class ChatWriter : MonoBehaviour {
     isWaitingForCallback = false;
 
     if (sayDialog?.writer != null) {
-      Locker<Fungus.Writer>.Unlock(sayDialog.writer);
+      Locker<Il2CppFungus.Writer>.Unlock(sayDialog.writer);
     }
 
     sayDialog = null;

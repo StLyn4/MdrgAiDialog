@@ -1,5 +1,8 @@
-using UnityEngine;
 using System;
+using UnityEngine;
+using MelonLoader;
+using Il2Cpp;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace MdrgAiDialog.Utils;
 
@@ -10,6 +13,7 @@ namespace MdrgAiDialog.Utils;
 /// Provides a framework for managing story state and character interactions.
 /// Derived classes must implement the Story method to define their specific story logic
 /// </remarks>
+[RegisterTypeInIl2Cpp]
 public abstract class StoryMonoBehaviour : MonoBehaviour {
   /// <summary>
   /// Indicates whether a story is currently active
@@ -25,6 +29,7 @@ public abstract class StoryMonoBehaviour : MonoBehaviour {
   /// Implement this method in derived classes to define the story sequence.
   /// Call stopStory when the story is complete to properly cleanup resources
   /// </remarks>
+  [HideFromIl2Cpp]
   protected abstract void Story(Action stopStory);
 
   /// <summary>
@@ -53,6 +58,7 @@ public abstract class StoryMonoBehaviour : MonoBehaviour {
   /// <summary>
   /// Ends the story sequence and performs cleanup
   /// </summary>
+  [HideFromIl2Cpp]
   private void StopStory() {
     currentOnFinished?.Invoke();
     currentOnFinished = null;

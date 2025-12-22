@@ -1,7 +1,7 @@
-using Fungus;
-using HarmonyLib;
-using MdrgAiDialog.Chat;
 using System;
+using HarmonyLib;
+using Il2CppFungus;
+using MdrgAiDialog.Chat;
 
 namespace MdrgAiDialog.Patches;
 

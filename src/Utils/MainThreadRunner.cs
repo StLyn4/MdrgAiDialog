@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
 using Il2CppInterop.Runtime;
+using MelonLoader;
 
 namespace MdrgAiDialog.Utils;
 
@@ -16,6 +17,7 @@ namespace MdrgAiDialog.Utils;
 /// various synchronization mechanisms depending on the current environment
 /// </remarks>
 [MonoSingleton]
+[RegisterTypeInIl2Cpp]
 public class MainThreadRunner : MonoBehaviour {
   public static MainThreadRunner Instance => MonoSingletonManager.Get<MainThreadRunner>();
 

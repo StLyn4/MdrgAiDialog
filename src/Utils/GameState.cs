@@ -1,3 +1,5 @@
+using Il2Cpp;
+
 namespace MdrgAiDialog.Utils;
 
 /// <summary>

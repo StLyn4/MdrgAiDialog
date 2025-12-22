@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Il2Cpp;
 using MdrgAiDialog.Utils;
 
 namespace MdrgAiDialog.Chat;
@@ -11,12 +12,12 @@ public class ChatExecutor(ChatManager chatManager, ChatWriter chatWriter) {
   public readonly ChatManager chatManager = chatManager;
   public readonly ChatWriter chatWriter = chatWriter;
 
-  private readonly Logger logger = new("ChatExecutor");
+  private static readonly Logger logger = new("ChatExecutor");
 
   public static readonly HashSet<string> validExpressions = [
     "#!bot.Expression.VerySad", "#!bot.Expression.Sad",
     "#!bot.Expression.Happy", "#!bot.Expression.VeryHappy",
-    "#!bot.Expression.Shock","#!bot.Expression.VeryShock",
+    "#!bot.Expression.Shock", "#!bot.Expression.VeryShock",
     "#!bot.Expression.Angry", "#!bot.Expression.VeryAngry"
   ];
 
@@ -110,9 +111,9 @@ public class ChatExecutor(ChatManager chatManager, ChatWriter chatWriter) {
 
     // Implicit conversion of Il2CppSystem objects is slightly... broken.
     // Basically, it's `var emotes = [emote]`
-    var emotesArray = new Il2CppSystem.Collections.Generic.List<EmoteData>(1);
-    emotesArray.Add(emote);
-    var emotes = emotesArray.Cast<Il2CppSystem.Collections.Generic.IEnumerable<EmoteData>>();
+    var emotesList = new Il2CppSystem.Collections.Generic.List<EmoteData>(1);
+    emotesList.Add(emote);
+    var emotes = emotesList.Cast<Il2CppSystem.Collections.Generic.IEnumerable<EmoteData>>();
 
     MainThreadRunner.Run(() => {
       var live2DController = Live2DControllerSingleton.Instance;

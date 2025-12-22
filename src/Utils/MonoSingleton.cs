@@ -22,6 +22,8 @@ public static class MonoSingletonManager {
   private static readonly Dictionary<Type, MonoBehaviour> singletons = [];
   private static readonly HashSet<Type> pendingSingletons = [];
 
+  private static readonly Logger logger = new("MonoSingletonManager");
+
   /// <summary>
   /// Creates a new instance of a singleton component if it doesn't exist
   /// </summary>
@@ -37,8 +39,9 @@ public static class MonoSingletonManager {
       throw new Exception($"Type {typeof(T)} is not marked with MonoSingleton attribute");
     }
 
+    logger.Log($"Adding singleton {typeof(T)}");
     pendingSingletons.Add(typeof(T));
-    var component = Plugin.Instance.AddComponent<T>();
+    var component = Core.Instance.RootObject.AddComponent<T>();
     UnityEngine.Object.DontDestroyOnLoad(component);
     singletons[typeof(T)] = component;
     pendingSingletons.Remove(typeof(T));

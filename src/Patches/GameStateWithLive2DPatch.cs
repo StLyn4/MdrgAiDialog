@@ -1,4 +1,5 @@
 using HarmonyLib;
+using Il2Cpp;
 
 namespace MdrgAiDialog.Patches;
 

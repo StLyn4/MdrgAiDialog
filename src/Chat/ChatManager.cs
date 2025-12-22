@@ -1,7 +1,9 @@
-using BepInEx.Unity.IL2CPP.Utils;
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using MelonLoader;
+using Il2Cpp;
+using Il2CppInterop.Runtime.Attributes;
 using MdrgAiDialog.Utils;
 
 namespace MdrgAiDialog.Chat;
@@ -10,6 +12,7 @@ namespace MdrgAiDialog.Chat;
 /// Manages the chat interaction with the AI, including UI and game state
 /// </summary>
 [MonoSingleton]
+[RegisterTypeInIl2Cpp]
 public class ChatManager : StoryMonoBehaviour {
   public static ChatManager Instance => MonoSingletonManager.Get<ChatManager>();
 
@@ -25,15 +28,15 @@ public class ChatManager : StoryMonoBehaviour {
   private readonly ChatExecutor executor;
   private readonly Action<string> processUserInput;
 
-  private Fungus.NarrativeLog narrativeLog;
+  private Il2CppFungus.NarrativeLog narrativeLog;
 
   private string chatTitle = "Say something to the bot";
   private readonly string chatDescription = string.Join("\n", [
     "First request may take a while.",
     "",
     "Commands:",
-    "exit: Force exit the chat (or just say goodbye)",
-    "reset: Reset bot memory",
+    "/exit: Force exit the chat (or just say goodbye)",
+    "/reset: Reset bot memory",
   ]);
 
   /// <summary>
@@ -65,6 +68,7 @@ public class ChatManager : StoryMonoBehaviour {
   /// Ends the current chat session
   /// </summary>
   /// <param name="waitForInput">If true, waits for user input before closing</param>
+  [HideFromIl2Cpp]
   public async Task StopChat(bool waitForInput = false) {
     await writer.Stop(waitForInput);
 
@@ -98,16 +102,25 @@ public class ChatManager : StoryMonoBehaviour {
   /// Implements the story interaction loop
   /// </summary>
   /// <param name="stopStory">Action to call when story should end</param>
+  [HideFromIl2Cpp]
   protected override void Story(Action stopStory) {
-    this.StartCoroutine(ChatLoop(stopStory));
+    MelonCoroutines.Start(ChatLoop(stopStory));
   }
 
+  [HideFromIl2Cpp]
   private IEnumerator ChatLoop(Action stopStory) {
     var uiOverlay = UiOverlay.Instance;
     var gameVariables = GameScript.Instance.GameVariables;
 
-    narrativeLog = FindObjectOfType<Fungus.NarrativeLog>();
+    narrativeLog = FindObjectOfType<Il2CppFungus.NarrativeLog>();
     IsChatActive = true;
+
+    // Provider preflight must happen BEFORE warmup (e.g. Ollama model download prompt).
+    // If preflight fails or is rejected, we still open the cha
+    var preflightTask = aiAdapter.EnsureReadyForChat();
+    while (!preflightTask.IsCompleted) {
+      yield return null;
+    }
 
     // Warm up the AI provider as soon as user clicks the chat button
     aiAdapter.WarmUp();
@@ -144,17 +157,23 @@ public class ChatManager : StoryMonoBehaviour {
     }
   }
 
+  [HideFromIl2Cpp]
   private async Task ProcessUserInputInternal(string userInput) {
-    switch (userInput.ToLower()) {
-      case "exit":
-        await StopChat();
-        return;
-      case "reset":
-        ResetChat();
-        return;
-      case "clear":
-        ChatExecutor.ResetBotEmotes();
-        return;
+    if (userInput.StartsWith("/")) {
+      switch (userInput.ToLower()) {
+        case "/exit":
+          await StopChat();
+          return;
+        case "/reset":
+          ResetChat();
+          return;
+        case "/clear":
+          ChatExecutor.ResetBotEmotes();
+          return;
+        case "/pack":
+          // TODO: Implement history packing
+          return;
+      }
     }
 
     if (!ValidateUserInput(userInput)) {
@@ -164,7 +183,7 @@ public class ChatManager : StoryMonoBehaviour {
     AddToNarrativeLog("You", userInput);
 
     await parser.Prepare();
-    await foreach (var chunk in aiAdapter.GetChatStream(userInput)) {
+    await foreach (var chunk in aiAdapter.SendMessage(userInput)) {
       await parser.Parse(chunk);
     }
     await parser.Flush();

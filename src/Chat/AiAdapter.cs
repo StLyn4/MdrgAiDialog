@@ -131,30 +131,38 @@ CRITICAL REMINDERS:
   }
 
   /// <summary>
-  /// Gets a streaming response from the AI provider
+  /// Runs provider-specific prerequisites before the chat UI enters a blocked "waiting" state.
+  /// </summary>
+  /// <returns>True if chat flow can continue, false if the send should be cancelled.</returns>
+  public Task<bool> EnsureReadyForChat() {
+    return provider.EnsureReadyForChat();
+  }
+
+  /// <summary>
+  /// Sends a message to the AI provider and gets a streaming response
   /// </summary>
   /// <param name="userInput">User's message</param>
   /// <returns>Stream of response chunks</returns>
-  public async IAsyncEnumerable<string> GetChatStream(string userInput) {
-    await foreach (var chunk in provider.GetChatStream(userInput)) {
+  public async IAsyncEnumerable<string> SendMessage(string userInput) {
+    await foreach (var chunk in provider.SendMessage(userInput)) {
       yield return chunk;
     }
   }
 
   private static AiProvider CreateProvider() {
-    var provider = PluginConfig.UsedAiProvider;
-    var apiUrl = PluginConfig.AiProviderApiUrl;
-    var apiKey = PluginConfig.AiProviderApiKey;
-    var model = PluginConfig.AiProviderModel;
-    var temperature = PluginConfig.AiProviderTemperature;
-    var timeoutSeconds = PluginConfig.AiProviderTimeoutSeconds;
+    var providerName = ModConfig.UsedProvider;
+    var config = ModConfig.GetConfigFor(providerName);
 
-    return provider.ToLower() switch {
-      "echo" => new EchoAiProvider(),
-      "test" => new TestAiProvider(),
-      "mistral" => new MistralAiProvider(apiUrl, apiKey, model, temperature, timeoutSeconds),
-      "ollama" => new OllamaAiProvider(apiUrl, model, temperature, timeoutSeconds),
-      _ => throw new ArgumentException($"Unknown AI provider: {provider}")
+    return providerName switch {
+      "Ollama" => new Ollama(config),
+      "OpenAI" => new OpenAi(config),
+      "OpenRouter" => new OpenRouter(config),
+      "Mistral" => new Mistral(config),
+      "Google" => new Google(config),
+      "DeepSeek" => new DeepSeek(config),
+      "Claude" => new Claude(config),
+      "Mock" => new Mock(config),
+      _ => throw new ArgumentException($"Unsupported AI provider type: {providerName}")
     };
   }
 }

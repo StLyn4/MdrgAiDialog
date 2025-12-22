@@ -1,6 +1,7 @@
-using HarmonyLib;
-using MdrgAiDialog.Chat;
 using System;
+using HarmonyLib;
+using Il2Cpp;
+using MdrgAiDialog.Chat;
 
 namespace MdrgAiDialog.Patches;
 

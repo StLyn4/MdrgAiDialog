@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -9,7 +8,12 @@ namespace MdrgAiDialog.AiProviders;
 /// <summary>
 /// Base class for AI providers that handle chat interactions
 /// </summary>
-public abstract class AiProvider {
+public abstract class AiProvider(AiProviderConfig config) {
+  /// <summary>
+  /// Configuration for this provider
+  /// </summary>
+  protected readonly AiProviderConfig config = config;
+
   /// <summary>
   /// Chat history containing system, user and assistant messages
   /// </summary>
@@ -24,18 +28,22 @@ public abstract class AiProvider {
   public abstract Task WarmUp();
 
   /// <summary>
-  /// Sends a message to the AI and gets a complete response
+  /// Ensures the provider is ready to process a new user message before the UI enters a blocked "waiting" state.
   /// </summary>
-  /// <param name="message">Message to send</param>
-  /// <returns>AI's response</returns>
-  public abstract Task<string> SendMessage(string message);
+  /// <remarks>
+  /// This hook is intended for provider-specific prerequisites (e.g. local model availability checks, auth prompts).
+  /// </remarks>
+  /// <returns>True if chat flow can continue, false if the send should be cancelled.</returns>
+  public virtual Task<bool> EnsureReadyForChat() {
+    return Task.FromResult(true);
+  }
 
   /// <summary>
   /// Sends a message to the AI and gets a streaming response
   /// </summary>
   /// <param name="message">Message to send</param>
   /// <returns>Stream of response chunks</returns>
-  public abstract IAsyncEnumerable<string> GetChatStream(string message);
+  public abstract IAsyncEnumerable<string> SendMessage(string message);
 
   /// <summary>
   /// Sets or updates the system message that guides AI behavior
@@ -74,7 +82,7 @@ public abstract class AiProvider {
   /// <summary>
   /// Represents a message in the chat history
   /// </summary>
-  protected class ChatMessage {
+  public class ChatMessage {
     /// <summary>
     /// Role of the message sender (system/user/assistant)
     /// </summary>
@@ -86,5 +94,11 @@ public abstract class AiProvider {
     /// </summary>
     [JsonPropertyName("content")]
     public string Content { get; set; }
+
+    /// <summary>
+    /// Whether the message is a prefix
+    /// </summary>
+    [JsonPropertyName("prefix")]
+    public bool? Prefix { get; set; }
   }
 }
