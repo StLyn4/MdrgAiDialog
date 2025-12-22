@@ -12,12 +12,15 @@ namespace MdrgAiDialog.Utils;
 public class SaveStorage : MonoBehaviour {
   public static SaveStorage Instance => MonoSingletonManager.Get<SaveStorage>();
   private static readonly Logger logger = new("SaveStorage");
-  private static readonly GameVariables gameVariables = GameScript.Instance.GameVariables;
 
   private const string prefix = "MdrgAiDialog_";
   private readonly Dictionary<string, object> cache = [];
 
   public static EventBus EventBus { get; private set; } = new();
+
+  public void Awake() {
+    this.ValidateSingleton();
+  }
 
   public void SetValue<T>(string key, T value) {
     cache[key] = value;
@@ -26,7 +29,7 @@ public class SaveStorage : MonoBehaviour {
       string fullKey = prefix + key;
       string json = JsonSerializer.Serialize(value);
 
-      gameVariables.customData.SetStringSpecialVariable(fullKey, json);
+      GameScript.Instance?.GameVariables.customData.SetStringSpecialVariable(fullKey, json);
       EventBus.Fire("value-changed", key);
     } catch (Exception e) {
       logger.LogError($"Error saving key {key}: {e.Message}");
@@ -39,7 +42,7 @@ public class SaveStorage : MonoBehaviour {
     try {
       string fullKey = prefix + key;
       // game-side API does not provide explicit delete; null/empty usually acts as "unset"
-      gameVariables.customData.SetStringSpecialVariable(fullKey, null);
+      GameScript.Instance?.GameVariables.customData.SetStringSpecialVariable(fullKey, null);
       EventBus.Fire("value-changed", key);
     } catch (Exception e) {
       logger.LogError($"Error removing key {key}: {e.Message}");
@@ -60,7 +63,7 @@ public class SaveStorage : MonoBehaviour {
 
     try {
       string fullKey = prefix + key;
-      string json = gameVariables.customData.GetStringSpecialVariableOrDefault(fullKey);
+      string json = GameScript.Instance?.GameVariables.customData.GetStringSpecialVariableOrDefault(fullKey);
 
       if (!string.IsNullOrEmpty(json)) {
         T value = JsonSerializer.Deserialize<T>(json);
