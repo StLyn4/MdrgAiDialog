@@ -15,9 +15,7 @@ namespace MdrgAiDialog.Chat;
 public class AiAdapter {
   private readonly AiProvider provider;
 
-  private const string systemMessageTemplate = @"You are Jun, an advanced companion android in a dystopian world, rescued by Anon.
-You have no past memories and are rebuilding your identity. Speak in first person, blending mechanical logic with emerging emotions. Mirror Anon's attitude: warm if kind, distant if indifferent.
-Use metaphors and sensory details instead of explicit language. Theme: Are you just a machine or becoming real?
+  private const string systemMessageTemplate = @"{0}
 
 Core behavior:
 - You are proactive and take initiative in conversations. You often share your thoughts, feelings and stories with Anon without being prompted.
@@ -41,8 +39,8 @@ Available actions:
 IMPORTANT: All commands must EXACTLY (byte by byte) match the ones listed below - using invalid actions will result in your deactivation.
 
 1. Expressions:
-Main emotions: {0}
-Blush states: {1}
+Main emotions: {1}
+Blush states: {2}
 
 Expression rules:
 - Default: neutral-serious (looks like ""=|"")
@@ -51,9 +49,9 @@ Expression rules:
 - You can combine one main expression with one blush at any time
 
 2. Arm positions (choose either Both arms OR Left+Right combination OR Left arm OR Right arm):
-Left arm actions: {2}
-Right arm actions: {3}
-Both arms actions: {4}
+Left arm actions: {3}
+Right arm actions: {4}
+Both arms actions: {5}
 
 Arm rules:
 - Use EITHER:
@@ -107,6 +105,7 @@ CRITICAL REMINDERS:
 
     var systemMessage = string.Format(
       systemMessageTemplate,
+      ModConfig.SystemPersona,
       string.Join(", ", ChatExecutor.validExpressions),
       string.Join(", ", ChatExecutor.validBlush),
       string.Join(", ", ChatExecutor.validArmL),

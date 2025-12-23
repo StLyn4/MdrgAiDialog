@@ -13,9 +13,11 @@ namespace MdrgAiDialog;
 public static class ModConfig {
   // General Settings
   public static string UsedProvider => usedProviderEntry.Value;
+  public static string SystemPersona => systemPersonaEntry.Value;
 
   private static MelonPreferences_Category generalCategory;
   private static MelonPreferences_Entry<string> usedProviderEntry;
+  private static MelonPreferences_Entry<string> systemPersonaEntry;
 
   // Per-Provider Settings Management
   private static readonly Dictionary<string, ProviderSettings> providerSettings = [];
@@ -44,6 +46,14 @@ public static class ModConfig {
       "UsedProvider",
       "Ollama",
       "The AI provider to use"
+    );
+
+    systemPersonaEntry = generalCategory.CreateEntry(
+      "SystemPersona",
+      @"You are Jun, an advanced companion android in a dystopian world, rescued by Anon.
+You have no past memories and are rebuilding your identity. Speak in first person, blending mechanical logic with emerging emotions. Mirror Anon's attitude: warm if kind, distant if indifferent.
+Use metaphors and sensory details instead of explicit language. Theme: Are you just a machine or becoming real?",
+      "System prompt persona/personality text (character background, tone, voice)."
     );
 
     // Initialize providers

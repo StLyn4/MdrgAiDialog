@@ -8,9 +8,9 @@
 		<TargetFramework>net6.0</TargetFramework>
     <AssemblyName>MdrgAiDialog</AssemblyName>
     <Product>Mod for talking to LLM</Product>
-    <Version>0.3.0</Version>
-    <FileVersion>0.3.0</FileVersion>
-    <AssemblyVersion>0.3.0</AssemblyVersion>
+    <Version>0.3.1</Version>
+    <FileVersion>0.3.1</FileVersion>
+    <AssemblyVersion>0.3.1</AssemblyVersion>
 		<NeutralLanguage>en-US</NeutralLanguage>
 
 		<RootNamespace>MdrgAiDialog</RootNamespace>
