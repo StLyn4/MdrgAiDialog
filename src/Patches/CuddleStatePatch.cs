@@ -10,19 +10,19 @@ public class CuddleStatePatch {
   [HarmonyPatch("EnterState")]
   [HarmonyPostfix]
   public static void AfterEnterState(CuddleState __instance) {
-    var chat = ChatManager.Instance;
     var gameVariables = GameScript.Instance.GameVariables;
-
-    var cuddleStaticGui = __instance._cuddleStaticGui;
-    var buttonList = cuddleStaticGui.ButtonList;
-    var talkText = LOS.GetLocalizedString(LOC.UI.TupleReferences.Interact_Talk);
-
-    if (gameVariables.IsBotSmart) {
-      var buttonWrapper = buttonList.AddButton(0);
-      buttonWrapper.SetText($"{talkText} (AI)");
-      buttonWrapper.OnClick = new Action(chat.StartChat);
-
-      buttonList.UpdateAndSortButtons();
+    if (!gameVariables.IsBotSmart) {
+      return;
     }
+
+    var chat = ChatManager.Instance;
+    var buttonList = __instance._cuddleStaticGui.ButtonList;
+    var cuddleText = LOS.GetLocalizedString(LOC.UI.TupleReferences.Interact_Talk);
+
+    var buttonWrapper = buttonList.Cast<IModificationPeriodButtonList>().AddButton(0);
+    buttonWrapper.SetText($"{cuddleText} (AI)");
+    buttonWrapper.OnClick = new Action(chat.StartChat);
+
+    buttonList.UpdateCurrentButtonState();
   }
 }

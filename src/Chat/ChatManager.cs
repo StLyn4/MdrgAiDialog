@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 using MelonLoader;
 using Il2Cpp;
 using Il2CppInterop.Runtime.Attributes;
@@ -14,7 +15,7 @@ namespace MdrgAiDialog.Chat;
 /// </summary>
 [MonoSingleton]
 [RegisterTypeInIl2Cpp]
-public class ChatManager : StoryMonoBehaviour {
+public class ChatManager : MonoBehaviour {
   public static ChatManager Instance => MonoSingletonManager.Get<ChatManager>();
 
   /// <summary>
@@ -74,7 +75,7 @@ public class ChatManager : StoryMonoBehaviour {
   /// Begins a new chat session
   /// </summary>
   public void StartChat() {
-    StartStory();
+    MelonCoroutines.Start(ChatLoop());
   }
 
   /// <summary>
@@ -113,21 +114,45 @@ public class ChatManager : StoryMonoBehaviour {
   }
 
   /// <summary>
-  /// Implements the story interaction loop
+  /// Switches the game to ADV (Story) mode with a bottom dialogue window.
   /// </summary>
-  /// <param name="stopStory">Action to call when story should end</param>
-  [HideFromIl2Cpp]
-  protected override void Story(Action stopStory) {
-    MelonCoroutines.Start(ChatLoop(stopStory));
+  private static void EnterStoryState() {
+    var gameScript = GameScript.Instance;
+    var live2DController = Live2DControllerSingleton.Instance;
+    var currentController = live2DController.GetReadyController("bot");
+    var currentBrain = currentController.CurrentBrain;
+
+    currentController.PrepareForDialogue();
+    gameScript.ChangeToStoryState();
+    currentBrain.EnableBrain();
+    currentBrain.ChangeState(new StoryBrainState());
+    currentController.SetEnabled(true);
   }
 
+  private static void ExitStoryState() {
+    InteractState.OnStoryStateFinished();
+  }
+
+  /// <summary>
+  /// Main chat loop coroutine that handles the conversation flow
+  /// </summary>
+  /// <remarks>
+  /// Manages the input popup display and waits for user responses.
+  /// Runs until IsChatActive becomes false
+  /// </remarks>
   [HideFromIl2Cpp]
-  private IEnumerator ChatLoop(Action stopStory) {
+  private IEnumerator ChatLoop() {
     var uiOverlay = UiOverlay.Instance;
-    var gameVariables = GameScript.Instance.GameVariables;
+    var gameScript = GameScript.Instance;
+    var gameVariables = gameScript.GameVariables;
+    var isCuddling = Utils.GameState.IsStateType<CuddleState>();
 
     narrativeLog = FindObjectOfType<Il2CppFungus.NarrativeLog>();
     IsChatActive = true;
+
+    if (!isCuddling) {
+      EnterStoryState();
+    }
 
     // Provider preflight must happen BEFORE warmup (e.g. Ollama model download prompt).
     // If preflight fails or is rejected, we still open the cha
@@ -152,7 +177,9 @@ public class ChatManager : StoryMonoBehaviour {
       }
     }
 
-    stopStory();
+    if (!isCuddling) {
+      ExitStoryState();
+    }
   }
 
   private static bool ValidateUserInput(string userInput) {

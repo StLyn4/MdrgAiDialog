@@ -4,7 +4,7 @@ using UnityEngine;
 using MdrgAiDialog.Chat;
 using MdrgAiDialog.Utils;
 
-[assembly: MelonInfo(typeof(MdrgAiDialog.Core), "MdrgAiDialog", "0.3.1", "Delta", null)]
+[assembly: MelonInfo(typeof(MdrgAiDialog.Core), "MdrgAiDialog", "0.4.0", "Delta", null)]
 [assembly: MelonGame("IncontinentCell", "My Dystopian Robot Girlfriend")]
 
 namespace MdrgAiDialog;
@@ -33,8 +33,8 @@ public class Core : MelonMod {
 
     // Add singletons
     MonoSingletonManager.Add<MainThreadRunner>();
+    MonoSingletonManager.Add<SaveStorage>();
     MonoSingletonManager.Add<ChatManager>();
     MonoSingletonManager.Add<ChatWriter>();
-    MonoSingletonManager.Add<SaveStorage>();
   }
 }

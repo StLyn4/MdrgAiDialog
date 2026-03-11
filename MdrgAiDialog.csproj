@@ -8,9 +8,9 @@
 		<TargetFramework>net6.0</TargetFramework>
     <AssemblyName>MdrgAiDialog</AssemblyName>
     <Product>Mod for talking to LLM</Product>
-    <Version>0.3.1</Version>
-    <FileVersion>0.3.1</FileVersion>
-    <AssemblyVersion>0.3.1</AssemblyVersion>
+    <Version>0.4.0</Version>
+    <FileVersion>0.4.0</FileVersion>
+    <AssemblyVersion>0.4.0</AssemblyVersion>
 		<NeutralLanguage>en-US</NeutralLanguage>
 
 		<RootNamespace>MdrgAiDialog</RootNamespace>
@@ -42,9 +42,6 @@
   </Target>
 
 	<ItemGroup>
-		<Reference Include="Assembly-CSharp-firstpass">
-			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Assembly-CSharp-firstpass.dll</HintPath>
-		</Reference>
 		<Reference Include="Assembly-CSharp">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Assembly-CSharp.dll</HintPath>
 		</Reference>
@@ -53,6 +50,9 @@
 		</Reference>
 		<Reference Include="Il2CppAGUI.NET">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppAGUI.NET.dll</HintPath>
+		</Reference>
+		<Reference Include="Il2CppAttributesSamples">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppAttributesSamples.dll</HintPath>
 		</Reference>
 		<Reference Include="Il2CppAutoTranslateUI">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppAutoTranslateUI.dll</HintPath>
@@ -68,6 +68,12 @@
 		</Reference>
 		<Reference Include="Il2CppDOTween">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppDOTween.dll</HintPath>
+		</Reference>
+		<Reference Include="Il2CppDOTween.Modules">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppDOTween.Modules.dll</HintPath>
+		</Reference>
+		<Reference Include="Il2CppEditorAttributes">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppEditorAttributes.dll</HintPath>
 		</Reference>
 		<Reference Include="Il2CppF23.StringSimilarity">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppF23.StringSimilarity.dll</HintPath>
@@ -192,6 +198,9 @@
 		<Reference Include="Unity.2D.Animation.Runtime">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Unity.2D.Animation.Runtime.dll</HintPath>
 		</Reference>
+		<Reference Include="Unity.2D.Common.Runtime">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
+		</Reference>
 		<Reference Include="Unity.Addressables">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Unity.Addressables.dll</HintPath>
 		</Reference>
@@ -213,6 +222,9 @@
 		<Reference Include="Unity.InternalAPIEngineBridge.001">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Unity.InternalAPIEngineBridge.001.dll</HintPath>
 		</Reference>
+		<Reference Include="Unity.InternalAPIEngineBridge.004">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Unity.InternalAPIEngineBridge.004.dll</HintPath>
+		</Reference>
 		<Reference Include="Unity.Localization">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Unity.Localization.dll</HintPath>
 		</Reference>
@@ -230,6 +242,9 @@
 		</Reference>
 		<Reference Include="UnityEngine.AccessibilityModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.AccessibilityModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.AdaptivePerformanceModule">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.AdaptivePerformanceModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.AIModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.AIModule.dll</HintPath>
@@ -285,8 +300,14 @@
 		<Reference Include="UnityEngine.HierarchyCoreModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.HierarchyCoreModule.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.HierarchyModule">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.HierarchyModule.dll</HintPath>
+		</Reference>
 		<Reference Include="UnityEngine.HotReloadModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.HotReloadModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.IdentifiersModule">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.IdentifiersModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.ImageConversionModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.ImageConversionModule.dll</HintPath>
@@ -302,6 +323,9 @@
 		</Reference>
 		<Reference Include="UnityEngine.InputModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.InputModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.InsightsModule">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.InsightsModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.JSONSerializeModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.JSONSerializeModule.dll</HintPath>
@@ -324,17 +348,26 @@
 		<Reference Include="UnityEngine.Physics2DModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.Physics2DModule.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.PhysicsBackendPhysXModule">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.PhysicsBackendPhysXModule.dll</HintPath>
+		</Reference>
 		<Reference Include="UnityEngine.PhysicsModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.PhysicsModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.PropertiesModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.PropertiesModule.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.RenderAs2DModule">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.RenderAs2DModule.dll</HintPath>
+		</Reference>
 		<Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.ScreenCaptureModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.ScreenCaptureModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ShaderRuntimeModule">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.ShaderRuntimeModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.ShaderVariantAnalyticsModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.ShaderVariantAnalyticsModule.dll</HintPath>
@@ -399,11 +432,11 @@
 		<Reference Include="UnityEngine.UnityConnectModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.UnityConnectModule.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.UnityConsentModule">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.UnityConsentModule.dll</HintPath>
+		</Reference>
 		<Reference Include="UnityEngine.UnityCurlModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.UnityCurlModule.dll</HintPath>
-		</Reference>
-		<Reference Include="UnityEngine.UnityTestProtocolModule">
-			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.UnityTestProtocolModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
@@ -419,6 +452,9 @@
 		</Reference>
 		<Reference Include="UnityEngine.UnityWebRequestWWWModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.VectorGraphicsModule">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.VectorGraphicsModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.VehiclesModule">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\UnityEngine.VehiclesModule.dll</HintPath>

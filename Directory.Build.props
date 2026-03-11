@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
     <!-- Change this to your game path! -->
-    <GamePath>F:\Games\Other\PGs\My Dystopian Robot Girlfriend</GamePath>
+    <GamePath>F:\Games\Other\PGs\My Dystopian Robot Girlfriend\0.95</GamePath>
   </PropertyGroup>
 </Project>

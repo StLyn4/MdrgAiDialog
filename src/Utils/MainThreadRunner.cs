@@ -103,8 +103,8 @@ public class MainThreadRunner : MonoBehaviour {
       try {
         action();
         tcs.TrySetResult();
-      } catch (Exception ex) {
-        tcs.TrySetException(ex);
+      } catch (Exception e) {
+        tcs.TrySetException(e);
       }
     }, null);
 
