@@ -58,7 +58,7 @@ By design you are a sex robot, so you are never opposed to engaging in lewd or i
     );
 
     // Initialize providers
-    SetupProvider("Ollama", "http://localhost:11434/v1", "artifish/llama3.2-uncensored");
+    SetupProvider("Ollama", "http://localhost:11434/v1", "hf.co/roleplaiapp/MN-12B-Mag-Mell-R1-Q4_K_M-GGUF");
     SetupProvider("OpenAI", "https://api.openai.com/v1", "gpt-4.1-mini");
     SetupProvider("OpenRouter", "https://openrouter.ai/api/v1", "deepseek/deepseek-r1-0528:free");
     SetupProvider("Mistral", "https://api.mistral.ai/v1", "mistral-small-2506");
