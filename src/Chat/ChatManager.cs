@@ -145,14 +145,11 @@ public class ChatManager : MonoBehaviour {
     var uiOverlay = UiOverlay.Instance;
     var gameScript = GameScript.Instance;
     var gameVariables = gameScript.GameVariables;
-    var isCuddling = Utils.GameState.IsStateType<CuddleState>();
 
     narrativeLog = FindObjectOfType<Il2CppFungus.NarrativeLog>();
     IsChatActive = true;
 
-    if (!isCuddling) {
-      EnterStoryState();
-    }
+    EnterStoryState();
 
     // Provider preflight must happen BEFORE warmup (e.g. Ollama model download prompt).
     // If preflight fails or is rejected, we still open the cha
@@ -177,9 +174,7 @@ public class ChatManager : MonoBehaviour {
       }
     }
 
-    if (!isCuddling) {
-      ExitStoryState();
-    }
+    ExitStoryState();
   }
 
   private static bool ValidateUserInput(string userInput) {
