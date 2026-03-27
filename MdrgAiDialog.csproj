@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
     <!-- To change the game path, edit Directory.Build.props -->
-    <GamePath Condition="!Exists('$(GamePath)')">F:\Games\Other\PGs\My Dystopian Robot Girlfriend</GamePath>
+    <GamePath Condition="!Exists('$(GamePath)')">F:\Games\Other\PGs\My Dystopian Robot Girlfriend\0.96</GamePath>
     <MelonLoaderPath>$(GamePath)\MelonLoader</MelonLoaderPath>
     <ModsPath>$(GamePath)\Mods</ModsPath>
 
@@ -57,11 +57,17 @@
 		<Reference Include="Il2CppAutoTranslateUI">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppAutoTranslateUI.dll</HintPath>
 		</Reference>
+		<Reference Include="Il2CppBouncyCastle.Cryptography">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppBouncyCastle.Cryptography.dll</HintPath>
+		</Reference>
 		<Reference Include="Il2CppCFXRDemo">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppCFXRDemo.dll</HintPath>
 		</Reference>
 		<Reference Include="Il2CppCFXRRuntime">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppCFXRRuntime.dll</HintPath>
+		</Reference>
+		<Reference Include="Il2CppCoenM.Encoding.Z85e">
+			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppCoenM.Encoding.Z85e.dll</HintPath>
 		</Reference>
 		<Reference Include="Il2CppCoffee.UIParticle">
 			<HintPath>$(MelonLoaderPath)\Il2CppAssemblies\Il2CppCoffee.UIParticle.dll</HintPath>

@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 @REM Path to the game executable
-set "GAME_DIR_PATH=F:\Games\Other\PGs\My Dystopian Robot Girlfriend\0.95"
+set "GAME_DIR_PATH=F:\Games\Other\PGs\My Dystopian Robot Girlfriend\0.96"
 set "GAME_EXE_PATH=%GAME_DIR_PATH%\My Dystopian Robot Girlfriend.exe"
 
 @REM Store current directory
